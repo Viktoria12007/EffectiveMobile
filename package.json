@@ -1,19 +1,28 @@
 {
   "name": "effective_mobile",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
+  "description": "Test task",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node-dev index.ts",
+    "start": "ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Viktoriia Golubova",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "bcryptjs": "^3.0.2",
+    "class-validator": "^0.14.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.26"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.3.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
