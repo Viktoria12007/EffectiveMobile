@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-import { IsBoolean, IsDate, IsEmail, IsIn, IsString, Length } from "class-validator";
+import { IsBoolean, IsDate, IsEmail, IsIn, IsOptional, IsString, Length } from "class-validator";
 
 @Entity()
 export class User {
@@ -30,12 +30,14 @@ export class User {
   })
   password: string;
 
+  @IsOptional()
   @IsIn(['admin', 'user'])
   @Column({
     default: 'user'
   })
   role: 'admin' | 'user';
 
+  @IsOptional()
   @IsBoolean()
   @Column({
     default: true
