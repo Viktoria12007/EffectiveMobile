@@ -31,12 +31,14 @@ export class User {
   password: string;
 
   @IsIn(['admin', 'user'])
-  @Column()
+  @Column({
+    default: 'user'
+  })
   role: 'admin' | 'user';
 
   @IsBoolean()
   @Column({
-    default: false
+    default: true
   })
   isActive: boolean;
 }
