@@ -1,7 +1,8 @@
+import { NextFunction, Request, Response } from "express";
 import { RequestHandler } from 'express';
 import ForbiddenError from "../errors/forbidden-error";
 
-const adminOrMyself: RequestHandler = (req, res, next) => {
+const adminOrMyself: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
   const paramsIdNumber = parseInt(req.params.id, 10);
   const { id, role } = (req as any).user;
 
