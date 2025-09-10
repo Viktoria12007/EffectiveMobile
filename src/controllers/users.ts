@@ -65,10 +65,11 @@ export async function getUsers(req: Request, res: Response, next: NextFunction) 
   }
 }
 
-export function blockUser(id: number, updateUserDto: UpdateUserDto) {
-  return userRepository.update(id, updateUserDto);
-}
-
-export function isAdmin(user: User) {
-  return user.role === "admin";
+export async function blockUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userBlocked = await userRepository.update(parseInt(req.params.id, 10), { isActive: false });
+    res.send(userBlocked);
+  } catch (e) {
+    next(e);
+  }
 }
