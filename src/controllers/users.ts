@@ -1,5 +1,4 @@
 import { User } from "../entities/user";
-import { UpdateUserDto } from "../entities/dto/update-user.dto";
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import ConflictError from "../errors/conflict-error";
@@ -7,6 +6,7 @@ import BadRequestError from "../errors/bad-request-error";
 import jwt from 'jsonwebtoken';
 import UnauthorizedError from "../errors/unauthorized-error";
 import { AppDataSource } from "../data-source";
+import NotFoundError from "../errors/not-found-error";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -49,18 +49,22 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function getUserById(req: Request, res: Response, next: NextFunction) {
-  // const user = await userRepository.findOneBy({ id });
-  // if (!user) {
-  //   throw new NotFoundError("Такого пользователя не существует");
-  // }
-  // return res.send(user);
+  try {
+    const user = await userRepository.findOneBy({ id: parseInt(req.params.id, 10) });
+    if (!user) {
+      throw new NotFoundError("Такого пользователя не существует");
+    }
+    res.send(user);
+  } catch (e) {
+    next(e);
+  }
 }
 
 export async function getUsers(req: Request, res: Response, next: NextFunction) {
   try {
     const users = await userRepository.find();
     res.send(users);
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 }
