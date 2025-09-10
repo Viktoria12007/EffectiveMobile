@@ -5,11 +5,14 @@ import auth from "../middlewares/auth";
 import { NextFunction, Request, Response } from "express";
 import NotFoundError from "../errors/not-found-error";
 import checkIsActive from "../middlewares/checkIsActive";
+import { validation } from "../middlewares/validation";
+import { User } from "../entities/user";
+import { LoginUserDto } from "../entities/dto/login-user.dto";
 
 const router = Router();
 
-router.post("/signup", createUser);
-router.post("/signin", login);
+router.post("/signup", validation(User), createUser);
+router.post("/signin", validation(LoginUserDto), login);
 
 router.use(auth);
 router.use(checkIsActive);
