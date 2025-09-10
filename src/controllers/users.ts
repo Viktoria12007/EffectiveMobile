@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import UnauthorizedError from "../errors/unauthorized-error";
 import { AppDataSource } from "../data-source";
 import NotFoundError from "../errors/not-found-error";
+import { QueryFailedError } from "typeorm";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -18,8 +19,8 @@ export function createUser(req: Request, res: Response, next: NextFunction) {
     .catch((error) => {
       if (error.name === 'ValidationError') {
         next(new BadRequestError(error.message));
-      } else if (error.code === 11000) {
-        next(new ConflictError('Пользователь с данным email уже существует'));
+      } if (error instanceof QueryFailedError && error.driverError?.code === '23505') {
+        next(new ConflictError('Пользователь с таким e-mail уже существует'));
       } else {
         next(error);
       }
