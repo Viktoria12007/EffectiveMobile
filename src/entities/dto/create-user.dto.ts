@@ -1,3 +1,3 @@
 import { User } from "../user";
 
-export type CreateUserDto = Omit<User, "id" | "isActive">;
+export type CreateUserDto = Omit<User, "id">;
