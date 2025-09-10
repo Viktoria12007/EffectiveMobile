@@ -2,7 +2,6 @@ import { User } from "../entities/user";
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import ConflictError from "../errors/conflict-error";
-import BadRequestError from "../errors/bad-request-error";
 import jwt from 'jsonwebtoken';
 import UnauthorizedError from "../errors/unauthorized-error";
 import { AppDataSource } from "../data-source";
@@ -11,20 +10,19 @@ import { QueryFailedError } from "typeorm";
 
 const userRepository = AppDataSource.getRepository(User);
 
-export function createUser(req: Request, res: Response, next: NextFunction) {
-  const { fullName, dateOfBirth, email, password, role } = req.body;
-  bcrypt.hash(password, 10)
-    .then((hash) => userRepository.save({ fullName, dateOfBirth, email, role, password: hash }))
-    .then((data) => res.status(201).send(data))
-    .catch((error) => {
-      if (error.name === 'ValidationError') {
-        next(new BadRequestError(error.message));
-      } if (error instanceof QueryFailedError && error.driverError?.code === '23505') {
-        next(new ConflictError('Пользователь с таким e-mail уже существует'));
-      } else {
-        next(error);
-      }
-    })
+export async function createUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { fullName, dateOfBirth, email, password, role } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const data = await userRepository.save({ fullName, dateOfBirth, email, role, password: hash });
+    res.status(201).send(data);
+  } catch (e) {
+   if (e instanceof QueryFailedError && e.driverError?.code === '23505') {
+      next(new ConflictError('Пользователь с таким e-mail уже существует'));
+    } else {
+      next(e);
+    }
+  }
 }
 
 export async function login(req: Request, res: Response, next: NextFunction) {
