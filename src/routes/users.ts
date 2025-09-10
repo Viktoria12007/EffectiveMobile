@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { getUserById, getUsers } from "../controllers/users";
+import { blockUser, getUserById, getUsers } from "../controllers/users";
+import onlyAdmin from "../middlewares/onlyAdmin";
+import adminOrMyself from "../middlewares/adminOrMyself";
 
 const router = Router();
 
-router.get('/', getUsers);
-router.get('/:id', getUserById);
+router.get('/', onlyAdmin, getUsers);
+router.get('/:id', adminOrMyself, getUserById);
+router.patch('/:id/block', adminOrMyself, blockUser);
 
 export default router;
