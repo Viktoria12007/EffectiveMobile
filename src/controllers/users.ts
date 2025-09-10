@@ -29,7 +29,10 @@ export function createUser(req: Request, res: Response, next: NextFunction) {
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const { email, password } = req.body;
-    const user = await userRepository.findOne({ where: { email }, select: { password: true } });
+    const user = await userRepository.findOne({
+      where: { email },
+      select: { id: true, password: true, role: true, isActive: true }
+    });
     if (!user) {
      throw new UnauthorizedError('Неправильные почта или пароль');
     }
@@ -37,7 +40,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     if (!matched) {
       throw new UnauthorizedError('Неправильные почта или пароль')
     }
-    const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user.id, role: user.role, isActive: user.isActive }, process.env.JWT_SECRET);
     return res.cookie('jwt', token, {
       maxAge: 3600000,
       httpOnly: true,
