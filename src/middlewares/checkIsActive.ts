@@ -5,7 +5,7 @@ export default function checkIsActive(req: Request, res: Response, next: NextFun
   const { isActive } = (req as any).user;
 
   if (!isActive) {
-    next(new ForbiddenError("У вас нет разрешения на доступ к этому ресурсу"));
+    next(new ForbiddenError("Пользователь заблокирован"));
   } else {
     next();
   }
