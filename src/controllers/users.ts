@@ -13,7 +13,7 @@ const userRepository = AppDataSource.getRepository(User);
 export function createUser(req: Request, res: Response, next: NextFunction) {
   const { fullName, dateOfBirth, email, password, role } = req.body;
   bcrypt.hash(password, 10)
-    .then((hash) => userRepository.create({ fullName, dateOfBirth, email, role, password: hash }))
+    .then((hash) => userRepository.save({ fullName, dateOfBirth, email, role, password: hash }))
     .then((data) => res.status(201).send(data))
     .catch((error) => {
       if (error.name === 'ValidationError') {
