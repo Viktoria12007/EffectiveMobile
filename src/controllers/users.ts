@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import ConflictError from "../errors/conflict-error";
 import jwt from 'jsonwebtoken';
 import UnauthorizedError from "../errors/unauthorized-error";
-import { AppDataSource } from "../data-source";
+import { AppDataSource } from "../config/data-source";
 import NotFoundError from "../errors/not-found-error";
 import { QueryFailedError } from "typeorm";
 

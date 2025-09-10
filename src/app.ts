@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import "reflect-metadata";
 import routes from "./routes";
-import { AppDataSource } from "./data-source";
+import { AppDataSource } from "./config/data-source";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/error-handler";
